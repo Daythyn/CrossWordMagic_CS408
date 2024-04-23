@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Crossword Magic</string>
+
+    <string name ="across">across</string>
+    <string name ="down">down</string>
+
+    <string name ="dialog_title">Guess</string>
+    <string name ="dialog_message">Enter your Guess!</string>
+</resources>
