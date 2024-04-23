@@ -1,5 +1,6 @@
 package edu.jsu.mcis.cs408.crosswordmagic.model.dao;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,11 +14,13 @@ import com.opencsv.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import edu.jsu.mcis.cs408.crosswordmagic.R;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Puzzle;
+import edu.jsu.mcis.cs408.crosswordmagic.model.PuzzleListItem;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Word;
 import edu.jsu.mcis.cs408.crosswordmagic.model.WordDirection;
 
@@ -72,6 +75,7 @@ public class PuzzleDAO {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public Puzzle find(SQLiteDatabase db, int id) {
 
         /* use this method if there is NOT already a SQLiteDatabase open */
@@ -188,5 +192,48 @@ public class PuzzleDAO {
         return puzzle;
 
     }
+
+    public PuzzleListItem[] list(SQLiteDatabase db){
+
+        Log.i("MainActivity", "pDAO LIST Start");
+
+        ArrayList<PuzzleListItem> puzzles = new ArrayList<PuzzleListItem>();
+        PuzzleListItem tempPLI = null;
+        Integer tempInteger = null;
+        String tempName = null;
+
+        String query = daoFactory.getProperty("sql_list_puzzles");
+        Cursor cursor = db.rawQuery(query,null);
+
+        Log.i("MainActivity", "pDAO LIST SQL query launched: " + cursor.getCount());
+
+        if (cursor.moveToFirst()) {
+
+            cursor.moveToFirst();
+
+            do {
+
+                Log.i("MainActivity", "TING");
+
+                tempInteger = cursor.getInt(cursor.getColumnIndexOrThrow(daoFactory.getProperty("sql_field_id")));
+                tempName = cursor.getString(cursor.getColumnIndexOrThrow(daoFactory.getProperty("sql_field_name")));
+
+                Log.i("MainActivity", "pDAO LIST SQL Results : " + tempInteger + " " + tempName);
+
+                tempPLI = new PuzzleListItem(tempInteger, tempName);
+
+                puzzles.add(tempPLI);
+            }
+            while ( cursor.moveToNext() );
+
+            cursor.close();
+
+        }
+
+        Log.i("MainActivity", "pDAO List Finished : " + puzzles.toString());
+        return puzzles.toArray(new PuzzleListItem[]{});
+    }
+
+
 
 }

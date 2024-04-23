@@ -6,4 +6,8 @@
 
     <string name ="dialog_title">Guess</string>
     <string name ="dialog_message">Enter your Guess!</string>
+
+    <string name ="button_play">Play</string>
+    <string name ="crossword_magic_cover">Cover Image</string>
+
 </resources>

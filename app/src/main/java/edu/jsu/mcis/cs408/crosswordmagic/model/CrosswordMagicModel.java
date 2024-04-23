@@ -20,7 +20,24 @@ public class CrosswordMagicModel extends AbstractModel {
 
     WordDirection guessOld, guessNew = null;
 
+    PuzzleListItem[] pListOld, pListNew = null;
+
+    Context context;
+
+    public CrosswordMagicModel(Context context, int puzzle) {
+
+        this.context = context;
+
+        DAOFactory daoFactory = new DAOFactory(context);
+        PuzzleDAO puzzleDAO = daoFactory.getPuzzleDAO();
+
+        this.puzzle = puzzleDAO.find(puzzle);
+
+    }
+
     public CrosswordMagicModel(Context context) {
+
+        this.context = context;
 
         DAOFactory daoFactory = new DAOFactory(context);
         PuzzleDAO puzzleDAO = daoFactory.getPuzzleDAO();
@@ -100,4 +117,21 @@ public class CrosswordMagicModel extends AbstractModel {
         firePropertyChange(CrosswordMagicController.CHECK_GUESS, guessOld, guessNew);
     }
 
+
+    public void getPuzzleList(){
+
+        Log.i("MainActivity", "Attempting to retrieve Puzzle List");
+
+        DAOFactory daoFactory = new DAOFactory(context);
+            PuzzleDAO puzzleDAO = daoFactory.getPuzzleDAO();
+
+            pListOld = pListNew;
+            pListNew = puzzleDAO.list(daoFactory.getReadableDatabase());
+
+
+        Log.i("MainActivity", "Puzzle List Ready : " + pListNew.length);
+
+        firePropertyChange(CrosswordMagicController.PUZZLE_LIST_PROPERTY, pListOld, pListNew);
+
+    }
 }
